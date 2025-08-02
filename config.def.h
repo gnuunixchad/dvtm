@@ -69,7 +69,7 @@ static Layout layouts[] = {
 	{ "[ ]", fullscreen },
 };
 
-#define MOD  CTRL('g')
+#define MOD  CTRL('b')
 #define TAGKEYS(KEY,TAG) \
 	{ { MOD, 'v', KEY,     }, { view,           { tags[TAG] }               } }, \
 	{ { MOD, 't', KEY,     }, { tag,            { tags[TAG] }               } }, \
