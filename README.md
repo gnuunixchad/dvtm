@@ -8,6 +8,17 @@ programs.
 
 ![](./misc/screenshot.png)
 
+## Usage
+```sh
+# Multiplexing only
+dvtm
+
+# Multiplexing with session management, with my build of abduco
+# https://codeberg.org/unixchad/abduco
+# https://github.com/gnuunixchad/abduco
+abduco -c my-session
+```
+
 ## Statusbar
 dvtm can read a named pipe and display it in the statusbar.
 ```sh
