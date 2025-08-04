@@ -39,6 +39,9 @@ with the features of:
 My build of abduco([codeberg](https://codeberg.org/unixchad/abduco) or
 [github](https://github.com/gnuunixchad/abduco))
 
+## Dependencies
+- ncurses
+
 ## License
 
 dvtm reuses some code of dwm and is released under the same
