@@ -22,14 +22,10 @@ abduco -c my-session
 ## Statusbar
 dvtm can read a named pipe and display it in the statusbar.
 ```sh
-mkfifo $XDG_RUNTIME_DIR/dvtm.fifo
-${HOME}/.local/bin/dvtmblocks > $XDG_RUNTIME_DIR/dvtm.fifo
-dvtm -s $XDG_RUNTIME_DIR/dvtm.fifo
+${HOME}/.local/bin/dvtmblocks
+dvtm -s $XDG_RUNTIME_DIR/dvtmblocks.fifo
 ```
-[dvtmblocks](./dvtmblocks), my fork of [sbar](https://github.com/pystardust/sbar)
-with the features of:
-* Modules update with variable timing.
-* Signalling to update modules when needed.
+[dvtmblocks](./dvtmblocks)
 
 ## Patches applied
 
