@@ -19,6 +19,12 @@ dvtm
 abduco -c my-session
 ```
 
+## Environment variables
+```sh
+export DVTM_EDITOR="/usr/bin/vim"    # copy mode editor
+export DVTM_PAGER="/usr/bin/less -R" # scrollback history pager
+```
+
 ## Statusbar
 dvtm can read a named pipe and display it in the statusbar.
 ```sh
