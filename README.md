@@ -28,10 +28,14 @@ export DVTM_PAGER="/usr/bin/less -R" # scrollback history pager
 ## Statusbar
 dvtm can read a named pipe and display it in the statusbar.
 ```sh
-${HOME}/.local/bin/dvtmblocks
-dvtm -s $XDG_RUNTIME_DIR/dvtmblocks.fifo
+# run dvtm with status script
+dvtm-status
 ```
-[dvtmblocks](./dvtmblocks)
+Current modules in my [dvtm-status](./dvtm-status):
+- Date
+- Battery level with charging status
+- Unread new emails count from isync/neomutt
+- Login users count to be aware of SSH or TTY connections
 
 ## Patches applied
 
