@@ -3,7 +3,7 @@
 # @author nate zhou
 # @since 2025
 
-FIFO="/tmp/dvtm-status.$$"
+FIFO="${XDG_RUNTIME_DIR}/dvtm-status.fifo"
 
 [ -p "$FIFO" ] || mkfifo -m 600 "$FIFO" || exit 1
 
