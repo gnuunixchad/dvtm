@@ -29,7 +29,7 @@ static Color colors[] = {
 /* curses attributes for a window with pending urgent flag */
 #define URGENT_ATTR     NORMAL_ATTR
 /* curses attributes for the status bar */
-#define BAR_ATTR        (COLOR(GREEN) | A_NORMAL)
+#define BAR_ATTR        (DEFAULT | A_NORMAL)
 /* characters for beginning and end of status bar message */
 #define BAR_BEGIN       '['
 #define BAR_END         ']'
