@@ -80,7 +80,7 @@ static Layout layouts[] = {
 static KeyBinding bindings[] = {
 	{ { MOD, '\r',         }, { create,         { NULL }                    } },
 	{ { MOD, 'M',          }, { create,         { NULL, NULL, "$CWD" }      } },
-	{ { MOD, 'C',          }, { killclient,     { NULL }                    } },
+	{ { MOD, 'c', 'c',     }, { killclient,     { NULL }                    } },
 	{ { MOD, 'j',          }, { focusnext,      { NULL }                    } },
 	{ { MOD, 'J',          }, { focusdown,      { NULL }                    } },
 	{ { MOD, 'K',          }, { focusup,        { NULL }                    } },
@@ -111,7 +111,7 @@ static KeyBinding bindings[] = {
 	{ { MOD, '8',          }, { focusn,         { "8" }                     } },
 	{ { MOD, '9',          }, { focusn,         { "9" }                     } },
 	{ { MOD, '\t',         }, { focuslast,      { NULL }                    } },
-	{ { MOD, 'Q',          }, { quit,           { NULL }                    } },
+	{ { MOD, 'q', 'q',     }, { quit,           { NULL }                    } },
 	{ { MOD, 'r',          }, { togglerunall,   { NULL }                    } },
 	{ { MOD, CTRL('L'),    }, { redraw,         { NULL }                    } },
 	{ { MOD, 'e',          }, { copymode,       { "dvtm-editor" }           } },
