@@ -48,6 +48,28 @@ My build of abduco([codeberg](https://codeberg.org/unixchad/abduco) or
 ## Dependencies
 - ncurses
 
+## Known Issues
+### 1. neovim has every slow start/exit speed even with `--clean`
+I have `nvim` aliased as `vim`, but when inside dvtm vim is preffered for better
+performance:
+```sh
+if [ ! $UID -eq 0 ]; then
+    command -v nvim >/dev/null \
+        && [ -z "$DVTM" ] \
+        && alias vim="nvim"
+           vimdiff="nvim -d"
+fi
+```
+
+### 2. dvtm doesn't support 24-bit color
+I have created an autocmd to disable vim's 24-bit color inside dvtm:
+```vim
+augroup dvtm
+    autocmd!
+    autocmd BufEnter * if !empty(getenv('DVTM')) | setlocal notermguicolors | endif
+augroup END
+```
+
 ## License
 
 dvtm reuses some code of dwm and is released under the same
