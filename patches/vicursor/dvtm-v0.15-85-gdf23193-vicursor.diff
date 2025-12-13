@@ -1,0 +1,186 @@
+diff --git a/Makefile b/Makefile
+index a6062ae..818ca0a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -51,7 +51,7 @@ install: all
+ 		chmod 644 "${DESTDIR}${MANPREFIX}/man1/$$m"; \
+ 	done
+ 	@echo installing terminfo description
+-	@TERMINFO=${TERMINFO} tic -sx dvtm.info
++	@TERMINFO=${TERMINFO} tic -s dvtm.info
+ 
+ uninstall:
+ 	@for b in ${BIN}; do \
+diff --git a/config.def.h b/config.def.h
+index 0aec879..513c734 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -53,10 +53,6 @@ static Color colors[] = {
+ #define TAG_OCCUPIED (COLOR(BLUE) | A_NORMAL)
+ /* curses attributes for not selected tags which with urgent windows */
+ #define TAG_URGENT (COLOR(BLUE) | A_NORMAL | A_BLINK)
+-/* default cursor style set on all windows on creation
+- * https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h4-Functions-using-CSI-_-ordered-by-the-final-character-lparen-s-rparen:CSI-Ps-SP-q.1D81
+- */
+-#define CURSOR_STYLE 1
+ 
+ const char tags[][8] = { "1", "2", "3", "4", "5" };
+ 
+diff --git a/dvtm.c b/dvtm.c
+index 6d8cfd4..8382c83 100644
+--- a/dvtm.c
++++ b/dvtm.c
+@@ -69,7 +69,6 @@ struct Client {
+ 	volatile sig_atomic_t editor_died;
+ 	const char *cmd;
+ 	char title[255];
+-	int curstyle;
+ 	int order;
+ 	pid_t pid;
+ 	unsigned short int id;
+@@ -250,7 +249,6 @@ static const char *shell;
+ static Register copyreg;
+ static volatile sig_atomic_t running = true;
+ static bool runinall = false;
+-static char *curstyleseq;
+ 
+ static void
+ eprint(const char *errstr, ...) {
+@@ -572,18 +570,6 @@ settitle(Client *c) {
+ 	}
+ }
+ 
+-static void
+-setcurstyle(Client *c) {
+-	int ct = -1;
+-	char *term;
+-	if (sel == c)
+-		ct = c->curstyle;
+-	if (ct+1 && (term = getenv("TERM")) && !strstr(term, "linux")) {
+-		putp(tiparm(curstyleseq, ct));
+-		fflush(stdout);
+-	}
+-}
+-
+ static void
+ detachstack(Client *c) {
+ 	Client **tc;
+@@ -611,7 +597,6 @@ focus(Client *c) {
+ 		detachstack(c);
+ 		attachstack(c);
+ 		settitle(c);
+-		setcurstyle(c);
+ 		c->urgent = false;
+ 		if (isarrange(fullscreen)) {
+ 			draw(c);
+@@ -654,16 +639,6 @@ term_title_handler(Vt *term, const char *title) {
+ 	applycolorrules(c);
+ }
+ 
+-static void
+-term_curstyle_handler(Vt *term, const int style) {
+-	Client *c = (Client *)vt_data_get(term);
+-	if (style == -1 || style == 1) /* 1 or no parameter goes to default */
+-		c->curstyle = CURSOR_STYLE;
+-	else if (style > -1) /* otherwise pass it through */
+-		c->curstyle = style;
+-	setcurstyle(c);
+-}
+-
+ static void
+ term_urgent_handler(Vt *term) {
+ 	Client *c = (Client *)vt_data_get(term);
+@@ -983,8 +958,6 @@ setup(void) {
+ 	nonl();
+ 	keypad(stdscr, TRUE);
+ 	mouse_setup();
+-	if ((curstyleseq = tigetstr("Ss")) == NULL)
+-		curstyleseq = "\E[%p1%d q";
+ 	raw();
+ 	vt_init();
+ 	vt_keytable_set(keytable, LENGTH(keytable));
+@@ -1087,7 +1060,6 @@ create(const char *args[]) {
+ 		return;
+ 	c->tags = tagset[seltags];
+ 	c->id = ++cmdfifo.id;
+-	c->curstyle = CURSOR_STYLE;
+ 	snprintf(buf, sizeof buf, "%d", c->id);
+ 
+ 	if (!(c->window = newwin(wah, waw, way, wax))) {
+@@ -1123,7 +1095,6 @@ create(const char *args[]) {
+ 		free(cwd);
+ 	vt_data_set(c->term, c);
+ 	vt_title_handler_set(c->term, term_title_handler);
+-	vt_curstyle_handler_set(c->term, term_curstyle_handler);
+ 	vt_urgent_handler_set(c->term, term_urgent_handler);
+ 	applycolorrules(c);
+ 	c->x = wax;
+diff --git a/dvtm.info b/dvtm.info
+index 1a77cec..cafc0fe 100644
+--- a/dvtm.info
++++ b/dvtm.info
+@@ -127,8 +127,6 @@ dvtm|dynamic virtual terminal manager,
+ 	smul=\E[4m,
+ 	tbc=\E[3g,
+ 	vpa=\E[%i%p1%dd,
+-	Se=\E[0 q,
+-	Ss=\E[%p1%d q,
+ 
+ dvtm-256color|dynamic virtual terminal manager with 256 colors,
+ 	use=dvtm,
+diff --git a/vt.c b/vt.c
+index 28b9e00..15dabc1 100644
+--- a/vt.c
++++ b/vt.c
+@@ -192,7 +192,6 @@ struct Vt {
+ 	int srow, scol;          /* last known offset to display start row, start column */
+ 	char title[256];         /* xterm style window title */
+ 	vt_title_handler_t title_handler; /* hook which is called when title changes */
+-	vt_curstyle_handler_t curstyle_handler; /* hook which is called when curstyle changes */
+ 	vt_urgent_handler_t urgent_handler; /* hook which is called upon bell */
+ 	void *data;              /* user supplied data */
+ };
+@@ -1102,11 +1101,6 @@ static void interpret_csi(Vt *t)
+ 		if (param_count == 1 && csiparam[0] == 6)
+ 			send_curs(t);
+ 		break;
+-	case 'q': /* change cursor style */
+-		if (t->curstyle_handler && param_count < 2
+-				&& t->ebuf[t->elen - 2] == ' ')
+-			t->curstyle_handler(t, param_count ? csiparam[0] : -1 );
+-		break;
+ 	default:
+ 		break;
+ 	}
+@@ -1886,11 +1880,6 @@ void vt_title_handler_set(Vt *t, vt_title_handler_t handler)
+ 	t->title_handler = handler;
+ }
+ 
+-void vt_curstyle_handler_set(Vt *t, vt_curstyle_handler_t handler)
+-{
+-	t->curstyle_handler = handler;
+-}
+-
+ void vt_urgent_handler_set(Vt *t, vt_urgent_handler_t handler)
+ {
+ 	t->urgent_handler = handler;
+diff --git a/vt.h b/vt.h
+index 49a5a0a..0cd9e8a 100644
+--- a/vt.h
++++ b/vt.h
+@@ -28,7 +28,6 @@
+ 
+ typedef struct Vt Vt;
+ typedef void (*vt_title_handler_t)(Vt*, const char *title);
+-typedef void (*vt_curstyle_handler_t)(Vt*, const int style);
+ typedef void (*vt_urgent_handler_t)(Vt*);
+ 
+ void vt_init(void);
+@@ -36,7 +35,6 @@ void vt_shutdown(void);
+ 
+ void vt_keytable_set(char const * const keytable_overlay[], int count);
+ void vt_default_colors_set(Vt*, attr_t attrs, short fg, short bg);
+-void vt_curstyle_handler_set(Vt*, vt_curstyle_handler_t);
+ void vt_title_handler_set(Vt*, vt_title_handler_t);
+ void vt_urgent_handler_set(Vt*, vt_urgent_handler_t);
+ void vt_data_set(Vt*, void *);

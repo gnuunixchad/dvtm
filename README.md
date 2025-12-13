@@ -39,7 +39,8 @@ Current modules in my [dvtm-status](./dvtm-status):
 
 ## Patches applied
 
- - [pertag](./patches/dvtm-v0.15-52-g7bcf43f-pertag.diff)([Originally from](http://waxandwane.org/dvtm.html))
+ - [pertag](./patches/pertag/README.md)
+ - [vicursor](./patches/vicursor/README.md)
 
 ## Session management
 My build of abduco([codeberg](https://codeberg.org/unixchad/abduco) or
