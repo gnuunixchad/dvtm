@@ -6,7 +6,7 @@ of tiling window management, popularized by X11-window managers like
 manager it tries to make it easy to work with multiple console based
 programs.
 
-![](./misc/screenshot.png)
+![](./misc/screenshot-colorscheme-tty.png)
 
 ## Usage
 ```sh
