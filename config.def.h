@@ -13,23 +13,25 @@
 
 enum {
 	DEFAULT,
-	GREEN,
+	TAG,
+    BAR,
 };
 
 static Color colors[] = {
 	[DEFAULT] = { .fg = -1,         .bg = -1, .fg256 = -1, .bg256 = -1, },
-	[GREEN]    = { .fg = COLOR_GREEN, .bg = 14, .fg256 = -1, .bg256 = 14, },
+	[TAG]    = { .fg = 4, .bg = 7, .fg256 = 4, .bg256 = 7, },
+	[BAR]    = { .fg = 7, .bg = 4, .fg256 = 7, .bg256 = 4, },
 };
 
 #define COLOR(c)        COLOR_PAIR(colors[c].pair)
 /* curses attributes for the currently focused window */
-#define SELECTED_ATTR   (COLOR(GREEN) | A_NORMAL)
+#define SELECTED_ATTR   (COLOR(BAR) | A_NORMAL)
 /* curses attributes for normal (not selected) windows */
 #define NORMAL_ATTR     (COLOR(DEFAULT) | A_NORMAL)
 /* curses attributes for a window with pending urgent flag */
 #define URGENT_ATTR     NORMAL_ATTR
 /* curses attributes for the status bar */
-#define BAR_ATTR        (DEFAULT | A_NORMAL)
+#define BAR_ATTR        (COLOR(BAR) | A_NORMAL)
 /* characters for beginning and end of status bar message */
 #define BAR_BEGIN       ' '
 #define BAR_END         ' '
@@ -46,13 +48,13 @@ static Color colors[] = {
 /* printf format string for the tag in the status bar */
 #define TAG_SYMBOL   "[%s]"
 /* curses attributes for the currently selected tags */
-#define TAG_SEL      (COLOR(GREEN) | A_BOLD)
+#define TAG_SEL      (COLOR(TAG) | A_BOLD)
 /* curses attributes for not selected tags which contain no windows */
-#define TAG_NORMAL   (COLOR(DEFAULT) | A_NORMAL)
+#define TAG_NORMAL   (COLOR(BAR) | A_NORMAL)
 /* curses attributes for not selected tags which contain windows */
-#define TAG_OCCUPIED (COLOR(GREEN) | A_NORMAL)
+#define TAG_OCCUPIED (COLOR(BAR) | A_NORMAL)
 /* curses attributes for not selected tags which with urgent windows */
-#define TAG_URGENT (COLOR(GREEN) | A_NORMAL | A_BLINK)
+#define TAG_URGENT (COLOR(TAG) | A_NORMAL | A_BLINK)
 /* default cursor style set on all windows on creation
  * https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h4-Functions-using-CSI-_-ordered-by-the-final-character-lparen-s-rparen:CSI-Ps-SP-q.1D81
  */
