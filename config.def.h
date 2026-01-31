@@ -76,9 +76,9 @@ static Layout layouts[] = {
 #define MOD  CTRL('b')
 #define TAGKEYS(KEY,TAG) \
 	{ { MOD, 'v', KEY,     }, { view,           { tags[TAG] }               } }, \
-	{ { MOD, 'a', KEY,     }, { tag,            { tags[TAG] }               } }, \
+	{ { MOD, 't', KEY,     }, { tag,            { tags[TAG] }               } }, \
 	{ { MOD, 'V', KEY,     }, { toggleview,     { tags[TAG] }               } }, \
-	{ { MOD, 'A', KEY,     }, { toggletag,      { tags[TAG] }               } },
+	{ { MOD, 'T', KEY,     }, { toggletag,      { tags[TAG] }               } },
 
 /* you can specifiy at most 3 arguments */
 static KeyBinding bindings[] = {
@@ -91,7 +91,7 @@ static KeyBinding bindings[] = {
 	{ { MOD, 'H',          }, { focusleft,      { NULL }                    } },
 	{ { MOD, 'L',          }, { focusright,     { NULL }                    } },
 	{ { MOD, 'k',          }, { focusprev,      { NULL }                    } },
-	{ { MOD, 't',          }, { setlayout,      { "[]=" }                   } },
+	{ { MOD, 'y',          }, { setlayout,      { "[]=" }                   } },
 	{ { MOD, 'g',          }, { setlayout,      { "+++" }                   } },
 	{ { MOD, 'u',          }, { setlayout,      { "TTT" }                   } },
 	{ { MOD, 'm',          }, { setlayout,      { "[M]" }                   } },
@@ -130,7 +130,7 @@ static KeyBinding bindings[] = {
 	{ { MOD, '0',          }, { view,           { NULL }                    } },
 	{ { MOD, 'v', '0'      }, { view,           { NULL }                    } },
 	{ { MOD, 'v', '\t',    }, { viewprevtag,    { NULL }                    } },
-	{ { MOD, 'a', '0'      }, { tag,            { NULL }                    } },
+	{ { MOD, 't', '0'      }, { tag,            { NULL }                    } },
 	TAGKEYS( '1',                              0)
 	TAGKEYS( '2',                              1)
 	TAGKEYS( '3',                              2)
