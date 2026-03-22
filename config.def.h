@@ -80,11 +80,20 @@ static Layout layouts[] = {
 	{ { MOD, 'V', KEY,     }, { toggleview,     { tags[TAG] }               } }, \
 	{ { MOD, 'T', KEY,     }, { toggletag,      { tags[TAG] }               } },
 
+
+#include "shifttag.c"
+
 /* you can specifiy at most 3 arguments */
 static KeyBinding bindings[] = {
 	{ { MOD, '\r',         }, { create,         { NULL }                    } },
 	{ { MOD, 'M',          }, { create,         { NULL, NULL, "$CWD" }      } },
 	{ { MOD, 'c', 'c',     }, { killclient,     { NULL }                    } },
+	{ { MOD, '\'',         }, { shifttag_occupied,   { "1" } } },
+	{ { MOD, ';',          }, { shifttag_occupied,   { "-1" } } },
+	{ { MOD, '"',          }, { shifttag,            { "1" } } },
+	{ { MOD, ':',          }, { shifttag,            { "-1" } } },
+	{ { MOD, CTRL('\''),   }, { shifttag_unoccupied, { "1" } } },
+	{ { MOD, CTRL(';'),    }, { shifttag_unoccupied, { "-1" } } },
 	{ { MOD, 'j',          }, { focusnext,      { NULL }                    } },
 	{ { MOD, 'J',          }, { focusdown,      { NULL }                    } },
 	{ { MOD, 'K',          }, { focusup,        { NULL }                    } },
