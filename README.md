@@ -41,6 +41,7 @@ Current modules in my [dvtm-status](./dvtm-status):
 
  - [pertag](./patches/pertag/README.md)
  - [vicursor](./patches/vicursor/README.md)
+ - [shifttag](./patches/shifttag/README.md)
 
 ## Session management
 My build of abduco([codeberg](https://codeberg.org/unixchad/abduco) or
